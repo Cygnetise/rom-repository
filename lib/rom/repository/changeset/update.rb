@@ -67,7 +67,7 @@ module ROM
       def diff
         @diff ||=
           begin
-            data = pipe.for_diff(__data__)
+            data = pipe.for_diff(_private_data)
             data_tuple = data.to_a
             data_keys = data.keys & original.keys
 

@@ -10,10 +10,10 @@ module ROM
       # Default no-op pipe
       EMPTY_PIPE = Pipe.new.freeze
 
-      # @!attribute [r] __data__
+      # @!attribute [r] _private_data
       #   @return [Hash] The relation data
       #   @api private
-      option :__data__, optional: true
+      option :_private_data, optional: true
 
       # @!attribute [r] pipe
       #   @return [Changeset::Pipe] data transformation pipe
@@ -166,7 +166,7 @@ module ROM
       #
       # @api public
       def data(data)
-        with(__data__: data)
+        with(_private_data: data)
       end
 
       # Coerce changeset to a hash
@@ -177,7 +177,7 @@ module ROM
       #
       # @api public
       def to_h
-        pipe.call(__data__)
+        pipe.call(_private_data)
       end
       alias_method :to_hash, :to_h
 
@@ -189,7 +189,7 @@ module ROM
       #
       # @api public
       def to_a
-        result == :one ? [to_h] : __data__.map { |element| pipe.call(element) }
+        result == :one ? [to_h] : _private_data.map { |element| pipe.call(element) }
       end
       alias_method :to_ary, :to_a
 
@@ -230,7 +230,7 @@ module ROM
       #
       # @api private
       def result
-        __data__.is_a?(Array) ? :many : :one
+        _private_data.is_a?(Array) ? :many : :one
       end
 
       # @api public
@@ -244,7 +244,7 @@ module ROM
       #
       # @api public
       def inspect
-        %(#<#{self.class} relation=#{relation.name.inspect} data=#{__data__}>)
+        %(#<#{self.class} relation=#{relation.name.inspect} data=#{_private_data}>)
       end
 
       # Data transformation pipe
@@ -260,16 +260,16 @@ module ROM
 
       # @api private
       def respond_to_missing?(meth, include_private = false)
-        super || __data__.respond_to?(meth)
+        super || _private_data.respond_to?(meth)
       end
 
       # @api private
       def method_missing(meth, *args, &block)
-        if __data__.respond_to?(meth)
-          response = __data__.__send__(meth, *args, &block)
+        if _private_data.respond_to?(meth)
+          response = _private_data.__send__(meth, *args, &block)
 
-          if response.is_a?(__data__.class)
-            with(__data__: response)
+          if response.is_a?(_private_data.class)
+            with(_private_data: response)
           else
             response
           end

@@ -129,7 +129,7 @@ RSpec.describe ROM::Repository, '#changeset' do
       let(:changeset_class) do
         Class.new(ROM::Changeset::Create) do
           def to_h
-            __data__.merge(name: 'Jane')
+            _private_data.merge(name: 'Jane')
           end
         end
       end

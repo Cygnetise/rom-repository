@@ -21,7 +21,7 @@ module ROM
       #
       # @api public
       def by_pk(pk, data = EMPTY_HASH)
-        new(relation.by_pk(pk), __data__: data)
+        new(relation.by_pk(pk), _private_data: data)
       end
     end
   end

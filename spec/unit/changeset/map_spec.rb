@@ -10,7 +10,7 @@ RSpec.describe ROM::Changeset, '.map' do
         def default_command_type
           :test
         end
-      end.new(relation, __data__: user_data)
+      end.new(relation, _private_data: user_data)
     end
 
     let(:relation) { double(:relation) }

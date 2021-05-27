@@ -11,7 +11,8 @@ group :development do
 end
 
 group :test do
-  gem 'rom', git: 'https://github.com/rom-rb/rom.git', branch: 'release-3.0'
+  gem 'pry-byebug'
+  gem 'rom', git: 'https://github.com/Cygnetise/rom.git', branch: 'dry-initializer-3'
   gem 'rom-sql', git: 'https://github.com/rom-rb/rom-sql.git', branch: 'release-1.0'
   gem 'rspec'
   gem 'dry-struct'

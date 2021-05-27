@@ -28,7 +28,7 @@ RSpec.describe ROM::Changeset do
     it 'returns a hash with changes' do
       expect(relation).to receive(:one).and_return(jane)
 
-      changeset = ROM::Changeset::Update.new(relation, __data__: { name: "Jane Doe" })
+      changeset = ROM::Changeset::Update.new(relation, _private_data: { name: "Jane Doe" })
 
       expect(changeset.diff).to eql(name: "Jane Doe")
     end
@@ -80,7 +80,7 @@ RSpec.describe ROM::Changeset do
     it 'returns true when data are equal to the original tuple' do
       expect(relation).to receive(:one).and_return(jane)
 
-      changeset = ROM::Changeset::Update.new(relation, __data__: { name: "Jane" })
+      changeset = ROM::Changeset::Update.new(relation, _private_data: { name: "Jane" })
 
       expect(changeset).to be_clean
     end
@@ -88,14 +88,14 @@ RSpec.describe ROM::Changeset do
     it 'returns false when data differs from the original tuple' do
       expect(relation).to receive(:one).and_return(jane)
 
-      changeset = ROM::Changeset::Update.new(relation, __data__: { name: "Jane Doe" })
+      changeset = ROM::Changeset::Update.new(relation, _private_data: { name: "Jane Doe" })
 
       expect(changeset).to_not be_clean
     end
   end
 
   describe 'quacks like a hash' do
-    subject(:changeset) { ROM::Changeset::Create.new(relation, __data__: data) }
+    subject(:changeset) { ROM::Changeset::Create.new(relation, _private_data: data) }
 
     let(:data) { instance_double(Hash, class: Hash) }
 
@@ -111,7 +111,7 @@ RSpec.describe ROM::Changeset do
       new_changeset = changeset.merge(foo: 'bar')
 
       expect(new_changeset).to be_instance_of(ROM::Changeset::Create)
-      expect(new_changeset.options).to eql(changeset.options.merge(__data__: { foo: 'bar' }))
+      expect(new_changeset.options).to eql(changeset.options.merge(_private_data: { foo: 'bar' }))
       expect(new_changeset.to_h).to eql(foo: 'bar')
     end
 
@@ -121,7 +121,7 @@ RSpec.describe ROM::Changeset do
   end
 
   describe 'quacks like an array' do
-    subject(:changeset) { ROM::Changeset::Create.new(relation, __data__: data) }
+    subject(:changeset) { ROM::Changeset::Create.new(relation, _private_data: data) }
 
     let(:data) { instance_double(Array, class: Array) }
 
@@ -137,7 +137,7 @@ RSpec.describe ROM::Changeset do
       new_changeset = changeset + [1, 2]
 
       expect(new_changeset).to be_instance_of(ROM::Changeset::Create)
-      expect(new_changeset.options).to eql(changeset.options.merge(__data__: [1, 2]))
+      expect(new_changeset.options).to eql(changeset.options.merge(_private_data: [1, 2]))
       expect(new_changeset.to_a).to eql([1, 2])
     end
 
@@ -147,7 +147,7 @@ RSpec.describe ROM::Changeset do
   end
 
   describe 'quacks like a custom object' do
-    subject(:changeset) { ROM::Changeset::Create.new(relation, __data__: data) }
+    subject(:changeset) { ROM::Changeset::Create.new(relation, _private_data: data) }
 
     let(:data) { OpenStruct.new(name: 'Jane') }
 
